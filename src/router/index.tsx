@@ -5,6 +5,8 @@ import { Landing } from '../pages/Landing';
 import { Login } from '../pages/Login';
 import { Register } from '../pages/Register';
 import { Home } from '../pages/Home';
+import { CreateTrip } from '../pages/CreateTrip';
+import { TripDetails } from '../pages/TripDetails';
 
 
 const ProtectedRoute = () => {
@@ -30,6 +32,8 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: '/home', element: <Home /> },
+          { path: '/create-trip', element: <CreateTrip /> },
+          { path: '/trips/:id', element: <TripDetails /> },
           
         ],
       },
