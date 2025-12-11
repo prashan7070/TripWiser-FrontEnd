@@ -15,7 +15,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initialize from LocalStorage on mount
+ 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('accessToken');
