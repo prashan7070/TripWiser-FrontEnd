@@ -7,6 +7,8 @@ import { Register } from '../pages/Register';
 import { Home } from '../pages/Home';
 import { CreateTrip } from '../pages/CreateTrip';
 import { TripDetails } from '../pages/TripDetails';
+import { AIGenerator } from '../pages/AIGenerator';
+
 
 
 const ProtectedRoute = () => {
@@ -34,6 +36,7 @@ const router = createBrowserRouter([
           { path: '/home', element: <Home /> },
           { path: '/create-trip', element: <CreateTrip /> },
           { path: '/trips/:id', element: <TripDetails /> },
+          { path: '/ai-generator', element: <AIGenerator /> },
           
         ],
       },
