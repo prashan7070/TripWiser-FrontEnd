@@ -9,6 +9,8 @@ import { CreateTrip } from '../pages/CreateTrip';
 import { TripDetails } from '../pages/TripDetails';
 import { AIGenerator } from '../pages/AIGenerator';
 import { Profile } from '../pages/Profile';
+import {ForgotPassword} from '../pages/ForgotPassword';
+import {ResetPassword} from '../pages/ResetPassword';
 import { Loader2 } from 'lucide-react'; 
 
 
@@ -45,6 +47,8 @@ const router = createBrowserRouter([
       { path: '/', element: <Landing /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
+      { path: '/forgot-password', element: <ForgotPassword /> },
+      { path: '/reset-password/:token', element: <ResetPassword /> },
       {
         element: <ProtectedRoute />,
         children: [
@@ -52,7 +56,8 @@ const router = createBrowserRouter([
           { path: '/create-trip', element: <CreateTrip /> },
           { path: '/trips/:id', element: <TripDetails /> },
           { path: '/ai-generator', element: <AIGenerator /> },
-          { path: '/profile', element: <Profile /> },
+          { path: '/profile', element: <Profile /> }
+          
         ],
       },
     ],

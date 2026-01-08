@@ -16,16 +16,16 @@ export const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      
+
       const response: any = await authService.login(formData);
       console.log("Full Login Response:", response);
-      
+
       const userData = response.user || response.data?.user || response.data;
       const token = response.accessToken || response.data?.accessToken;
       const refreshToken = response.refreshToken || response.data?.refreshToken;
 
       if (token && userData) {
-      
+
         login(userData, token, refreshToken);
         console.log("Login successful, navigating...");
         navigate('/home');
@@ -41,20 +41,23 @@ export const Login: React.FC = () => {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen pt-20 flex items-center justify-center px-4">
       <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
         <h2 className="text-3xl font-bold text-center mb-8">Welcome Back</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <Input 
+          <Input
             label="Email" type="email" required
-            value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}
+            value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
-          <Input 
+          <Input
             label="Password" type="password" required
-            value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})}
+            value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
+          <div className="text-right">
+            <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">Forgot Password?</Link>
+          </div>
           <Button type="submit" className="w-full" isLoading={loading}>Sign In</Button>
         </form>
         <div className="my-6 flex items-center"><div className="flex-grow border-t border-slate-200"></div><span className="mx-4 text-slate-400 text-sm">OR</span><div className="flex-grow border-t border-slate-200"></div></div>

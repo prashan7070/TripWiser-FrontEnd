@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { userService } from '../services/user.service'; 
+import { authService } from '../services/auth.service';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
-import { User as UserIcon, Camera, Save, ArrowLeft } from 'lucide-react';
+import { User as UserIcon, Camera, Save, ArrowLeft,Lock  } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Profile: React.FC = () => {
@@ -21,6 +22,14 @@ export const Profile: React.FC = () => {
   // Image Handling
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+
+  //PASSWORD Change State
+  const [passData, setPassData] = useState({
+    oldPassword: '',
+    newPassword: ''
+  });
+
+  const [passLoading, setPassLoading] = useState(false);
 
   // Load User Data when page opens
   useEffect(() => {
@@ -68,6 +77,32 @@ export const Profile: React.FC = () => {
       setLoading(false);
     }
   };
+
+
+   // --- 2. 👇 HANDLE PASSWORD CHANGE ---
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPassLoading(true);
+
+    try {
+      // Call the backend API
+      await authService.changePassword(passData);
+      
+      alert("Password Changed Successfully! 🔒");
+      
+      // Clear fields
+      setPassData({ oldPassword: '', newPassword: '' });
+    } catch (error: any) {
+      console.error(error);
+      // Show error message from backend if available
+      const msg = error.response?.data?.message || "Failed to change password";
+      alert(msg);
+    } finally {
+      setPassLoading(false);
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen pt-24 pb-10 px-4 max-w-2xl mx-auto">
@@ -130,6 +165,40 @@ export const Profile: React.FC = () => {
             <Save className="w-5 h-5 mr-2" /> Save Changes
           </Button>
         </form>
+
+
+        {/* --- SECTION 2: SECURITY (Divider) --- */}
+        <div className="my-10 border-t border-slate-200"></div>
+
+        {/* --- PASSWORD CHANGE FORM --- */}
+        <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+          <Lock className="w-5 h-5 mr-2 text-indigo-600" /> Security
+        </h2>
+
+        <form onSubmit={handleChangePassword} className="space-y-6">
+          <Input 
+            type="password"
+            label="Current Password"
+            placeholder="Enter your old password"
+            value={passData.oldPassword}
+            onChange={(e) => setPassData({...passData, oldPassword: e.target.value})}
+            required
+          />
+          <Input 
+            type="password"
+            label="New Password"
+            placeholder="Enter new password"
+            value={passData.newPassword}
+            onChange={(e) => setPassData({...passData, newPassword: e.target.value})}
+            required
+            minLength={6}
+          />
+
+          <Button type="submit" variant="outline" className="w-full border-slate-300 hover:border-indigo-500 hover:text-indigo-600" isLoading={passLoading}>
+            Update Password
+          </Button>
+        </form>
+
       </div>
     </div>
   );
