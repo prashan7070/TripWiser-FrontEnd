@@ -16,7 +16,7 @@ export const Register: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await authService.register(formData);
+      await authService.register({ ...formData, role: "USER" });
       navigate('/login');
     } catch (error) {
       alert('Registration failed');
