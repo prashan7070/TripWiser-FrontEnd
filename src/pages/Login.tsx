@@ -16,16 +16,31 @@ export const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const data = await authService.login(formData);
-      login(data.user, data.accessToken, data.refreshToken);
-      navigate('/home');
+      
+      const response: any = await authService.login(formData);
+      console.log("Full Login Response:", response);
+      
+      const userData = response.user || response.data?.user || response.data;
+      const token = response.accessToken || response.data?.accessToken;
+      const refreshToken = response.refreshToken || response.data?.refreshToken;
+
+      if (token && userData) {
+      
+        login(userData, token, refreshToken);
+        console.log("Login successful, navigating...");
+        navigate('/home');
+      } else {
+        console.error("Token not found in response");
+        alert("Login Error: No token received from server");
+      }
+
     } catch (error) {
-      alert('Login failed');
+      console.error("Error during login:", error);
+      alert('Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
-  
   
   return (
     <div className="min-h-screen pt-20 flex items-center justify-center px-4">

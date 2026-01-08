@@ -10,27 +10,51 @@ export interface WeatherData {
   icon: string;
   humidity: number;
   windSpeed: number;
+  description?: string;
+  warning?: string | null;
+  dataType?: "LIVE_ACCURATE" | "SEASONAL_AVERAGE";
 }
 
-export interface DailyPlan {
-  day: number;
-  activities: string[];
+export interface Activity {
+  _id?: string;
+  name: string;
+  isCompleted?: boolean;
 }
+
+export interface TripStop {
+  _id?: string;
+  locationName: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  order: number;
+  hotel?: {
+    name?: string;
+    pricePerNight?: number;
+    address?: string;
+  };
+  activities: Activity[];
+}
+
 
 export interface Trip {
-  _id?: string;
+  _id: string;
+  userId?: string;
   title: string;
-  destination: string;
-  startDate: string;
+  startDate: string; 
   endDate: string;
-  notes?: string;
-  location: Location;
-  budget?: number;
-  type?: 'adventure' | 'chill' | 'family' | 'romantic' | 'business';
-  itinerary?: DailyPlan[];
-  weatherSummary?: WeatherData;
+  budget: number | string; 
+  
+  travelStyle: string; 
+  status: 'draft' | 'active' | 'completed';
+  stops: TripStop[]; 
   coverImage?: string;
+  notes?: string;
+  isAiGenerated?: boolean;
+  weatherSummary?: WeatherData;
 }
+
 
 export type TripDraft = Omit<Trip, '_id' | 'weatherSummary'>;
 
@@ -39,4 +63,5 @@ export interface TripAIParams {
   days: number;
   budget: string;
   type: string;
+  tripDate?: string;
 }

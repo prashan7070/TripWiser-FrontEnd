@@ -6,7 +6,7 @@ interface TripContextType {
   trips: Trip[];
   isLoading: boolean;
   fetchTrips: () => Promise<void>;
-  addTrip: (trip: Trip) => void;
+  deleteTrip: (id: string) => Promise<void>; 
 }
 
 const TripContext = createContext<TripContextType | undefined>(undefined);
@@ -15,6 +15,7 @@ export const TripProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [trips, setTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  //Fetch Trips
   const fetchTrips = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -27,12 +28,20 @@ export const TripProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  const addTrip = (trip: Trip) => {
-    setTrips((prev) => [...prev, trip]);
+  
+  const deleteTrip = async (id: string) => {
+    try {
+      
+      await tripService.delete(id);
+      setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== id));
+    } catch (error) {
+      console.error("Failed to delete trip", error);
+      alert("Failed to delete trip");
+    }
   };
 
   return (
-    <TripContext.Provider value={{ trips, isLoading, fetchTrips, addTrip }}>
+    <TripContext.Provider value={{ trips, isLoading, fetchTrips, deleteTrip }}>
       {children}
     </TripContext.Provider>
   );

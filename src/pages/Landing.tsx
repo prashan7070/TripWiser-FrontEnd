@@ -1,23 +1,42 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { Map, CloudSun, Sparkles, ArrowRight, MapPin, Navigation, Compass, Star } from 'lucide-react';
+import { CloudSun, Sparkles, ArrowRight, Compass, Star } from 'lucide-react';
+import { useAuth } from '../context/AuthContext'; 
+import { useEffect } from 'react';
 
 export const Landing: React.FC = () => {
+
+  const { isAuthenticated } = useAuth(); 
+  const navigate = useNavigate();
+
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <div className="min-h-screen bg-white font-sans selection:bg-teal-100">
       
     
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        
+
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1566996695278-d56d16f39385?q=80&w=2070&auto=format&fit=crop" 
-            alt="Sri Lanka Train Kandy to Ella" 
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            poster=""
             className="w-full h-full object-cover"
-          />
+          >
+            <source src="/hero.mp4" type="video/mp4" />
+          </video>
           
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-900/80"></div>
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
         </div>
 
         {/* Hero Content */}
@@ -59,7 +78,7 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. DESTINATIONS GRID - Polished & Reliable Images */}
+      {/* 2. DESTINATIONS GRID */}
       <section className="py-24 bg-stone-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -71,24 +90,26 @@ export const Landing: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[350px]">
             
-            {/* 1. Sigiriya (Large) */}
-            <div className="md:col-span-2 md:row-span-2 group relative rounded-[2rem] overflow-hidden shadow-xl cursor-pointer">
-              <img 
-                src="https://images.unsplash.com/photo-1580816912384-633054f19b26?q=80&w=2070&auto=format&fit=crop" 
-                alt="Sigiriya Lion Rock" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-              <div className="absolute bottom-8 left-8 text-white">
-                <span className="bg-orange-500 text-xs font-bold px-2 py-1 rounded text-white mb-2 inline-block">CULTURAL TRIANGLE</span>
-                <h3 className="text-3xl font-bold flex items-center gap-2">
-                  Sigiriya Rock Fortress
-                </h3>
-                <p className="text-slate-300 mt-2">The 8th wonder of the world.</p>
-              </div>
+            <div className="md:col-span-2 md:row-span-2 group relative rounded-[2rem] overflow-hidden shadow-xl cursor-pointer h-full min-h-[300px]">
+  
+                <img 
+                  src="/sigiriya rock.jpg" 
+                  alt="Sigiriya Lion Rock" 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                />
+              
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+              
+                <div className="absolute bottom-8 left-8 text-white z-20">
+                  <span className="bg-orange-500 text-xs font-bold px-2 py-1 rounded text-white mb-2 inline-block">CULTURAL TRIANGLE</span>
+                  <h3 className="text-3xl font-bold">Sigiriya Rock Fortress</h3>
+                  <p className="text-slate-300 mt-2">The 8th wonder of the world.</p>
+                </div>
             </div>
 
-            {/* 2. Mirissa */}
+            
+
+            {/* Mirissa */}
             <div className="md:col-span-1 group relative rounded-[2rem] overflow-hidden shadow-xl cursor-pointer">
               <img 
                 src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?q=80&w=2070&auto=format&fit=crop" 
@@ -102,10 +123,10 @@ export const Landing: React.FC = () => {
               </div>
             </div>
 
-            {/* 3. Ella  */}
+
             <div className="md:col-span-1 group relative rounded-[2rem] overflow-hidden shadow-xl cursor-pointer">
               <img 
-                src="https://images.unsplash.com/photo-1588258902521-82d8c9735165?q=80&w=1974&auto=format&fit=crop" 
+                src="/nine arch bridge.jpg" 
                 alt="Nine Arch Bridge" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -116,7 +137,7 @@ export const Landing: React.FC = () => {
               </div>
             </div>
 
-            {/* 4. Galle (Fort) */}
+            {/* 4. Galle */}
             <div className="md:col-span-2 group relative rounded-[2rem] overflow-hidden shadow-xl cursor-pointer">
               <img 
                 src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=2039&auto=format&fit=crop" 
@@ -139,7 +160,7 @@ export const Landing: React.FC = () => {
       <section className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 space-y-32">
           
-          {/* Feature 1: AI */}
+          {/* Feature : AI */}
           <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="flex-1">
               <div className="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center text-teal-600 mb-6">
@@ -173,7 +194,7 @@ export const Landing: React.FC = () => {
             </div>
           </div>
 
-          {/* Feature 2: Weather */}
+          {/* Feature : Weather */}
           <div className="flex flex-col md:flex-row-reverse items-center gap-16">
             <div className="flex-1">
               <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 mb-6">
@@ -196,7 +217,7 @@ export const Landing: React.FC = () => {
             </div>
             <div className="flex-1">
                <img 
-                 src="https://images.unsplash.com/photo-1548263594-a71ea65a85b2?q=80&w=2075&auto=format&fit=crop" 
+                 src="/srilanka beach.jpg" 
                  className="rounded-[2rem] shadow-2xl shadow-orange-900/10 -rotate-2 hover:rotate-0 transition-transform duration-500" 
                  alt="Sunny Beach"
                />
@@ -206,7 +227,7 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. CTA SECTION */}
+      {/* CTA SECTION */}
       <section className="py-24 bg-gradient-to-br from-teal-900 to-slate-900 text-white relative overflow-hidden">
         
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-teal-500 rounded-full blur-[100px] opacity-30"></div>
@@ -227,7 +248,7 @@ export const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. FOOTER */}
+      {/*  FOOTER */}
       <footer className="bg-slate-950 text-slate-400 py-16 border-t border-slate-900">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
@@ -263,3 +284,5 @@ export const Landing: React.FC = () => {
     </div>
   );
 };
+
+
