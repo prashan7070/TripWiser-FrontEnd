@@ -79,7 +79,7 @@ export const Profile: React.FC = () => {
   };
 
 
-   // --- 2. 👇 HANDLE PASSWORD CHANGE ---
+   // --- HANDLE PASSWORD CHANGE ---
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setPassLoading(true);

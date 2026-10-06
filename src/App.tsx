@@ -1,25 +1,8 @@
-
-// import { GoogleOAuthProvider } from '@react-oauth/google';
-// import { AppRouter } from './routes';
-
-// const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-// function App() {
-//   return (
-//     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-//       <AppRouter />
-//     </GoogleOAuthProvider>
-//   );
-// }
-
-// export default App;
-
-
-
 import { GoogleOAuthProvider } from '@react-oauth/google'; 
 import { AppRouter } from './routes/index';
 import { AuthProvider } from './context/AuthContext';
 import { TripProvider } from './context/TripContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -33,11 +16,13 @@ function App() {
   return (
     
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID || ""}>
-      <AuthProvider>
-        <TripProvider>
-          <AppRouter />
-        </TripProvider>
-      </AuthProvider>
+      <ErrorBoundary>
+        <AuthProvider>
+          <TripProvider>
+            <AppRouter />
+          </TripProvider>
+        </AuthProvider>
+      </ErrorBoundary>
     </GoogleOAuthProvider>
   );
 }
