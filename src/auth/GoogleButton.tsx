@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/Button';
 
 
-export const GoogleButton: React.FC = () => {
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+const ActiveGoogleButton: React.FC = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -24,7 +26,6 @@ export const GoogleButton: React.FC = () => {
         const refreshToken = response.refreshToken || response.data?.refreshToken;
 
         if (user && accessToken) {
-          
           login(user, accessToken, refreshToken);
           navigate('/home');
         } else {
@@ -51,4 +52,22 @@ export const GoogleButton: React.FC = () => {
       Continue with Google
     </Button>
   );
+};
+
+export const GoogleButton: React.FC = () => {
+  if (!GOOGLE_CLIENT_ID) {
+    return (
+      <Button 
+        type="button" 
+        variant="outline" 
+        onClick={() => alert("Google Login requires VITE_GOOGLE_CLIENT_ID environment variable.")} 
+        className="w-full flex justify-center items-center opacity-75"
+      >
+        <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="h-5 w-5 mr-2" alt="Google" />
+        Continue with Google (Disabled)
+      </Button>
+    );
+  }
+
+  return <ActiveGoogleButton />;
 };
