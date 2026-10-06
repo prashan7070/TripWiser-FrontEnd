@@ -8,22 +8,26 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function App() {
-  
   if (!GOOGLE_CLIENT_ID) {
-    console.error("Google Client ID not found. Check .env file.");
+    console.warn("⚠️ Google Client ID is missing. Google Sign-In will be disabled.");
   }
 
-  return (
-    
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID || ""}>
-      <ErrorBoundary>
-        <AuthProvider>
-          <TripProvider>
-            <AppRouter />
-          </TripProvider>
-        </AuthProvider>
-      </ErrorBoundary>
+  const content = (
+    <ErrorBoundary>
+      <AuthProvider>
+        <TripProvider>
+          <AppRouter />
+        </TripProvider>
+      </AuthProvider>
+    </ErrorBoundary>
+  );
+
+  return GOOGLE_CLIENT_ID ? (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      {content}
     </GoogleOAuthProvider>
+  ) : (
+    content
   );
 }
 
