@@ -16,8 +16,11 @@ export const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-
-      const response: any = await authService.login(formData);
+      const cleanEmail = formData.email.toLowerCase().trim();
+      const response: any = await authService.login({
+        email: cleanEmail,
+        password: formData.password
+      });
       console.log("Full Login Response:", response);
 
       const userData = response.user || response.data?.user || response.data;
@@ -25,7 +28,6 @@ export const Login: React.FC = () => {
       const refreshToken = response.refreshToken || response.data?.refreshToken;
 
       if (token && userData) {
-
         login(userData, token, refreshToken);
         console.log("Login successful, navigating...");
         navigate('/home');
@@ -34,9 +36,10 @@ export const Login: React.FC = () => {
         alert("Login Error: No token received from server");
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during login:", error);
-      alert('Login failed. Please check your credentials.');
+      const message = error.response?.data?.message || 'Login failed. Please check your credentials.';
+      alert(message);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/auth.service';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
@@ -7,6 +8,7 @@ import { GoogleButton } from '../auth/GoogleButton';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ 
     firstname: '', lastname: '', email: '', password: '' 
@@ -16,10 +18,37 @@ export const Register: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await authService.register({ ...formData, role: "USER" });
-      navigate('/login');
-    } catch (error) {
-      alert('Registration failed');
+      const cleanEmail = formData.email.toLowerCase().trim();
+      
+      // 1. Register User
+      await authService.register({
+        firstname: formData.firstname.trim(),
+        lastname: formData.lastname.trim(),
+        email: cleanEmail,
+        password: formData.password,
+        role: "USER"
+      });
+
+      // 2. Automatically Log In
+      const response: any = await authService.login({
+        email: cleanEmail,
+        password: formData.password
+      });
+
+      const userData = response.user || response.data?.user || response.data;
+      const token = response.accessToken || response.data?.accessToken;
+      const refreshToken = response.refreshToken || response.data?.refreshToken;
+
+      if (token && userData) {
+        login(userData, token, refreshToken);
+        navigate('/home');
+      } else {
+        navigate('/login');
+      }
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      const message = error.response?.data?.message || 'Registration failed. Please check your details.';
+      alert(message);
     } finally {
       setLoading(false);
     }
